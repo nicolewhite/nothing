@@ -45,9 +45,20 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/add_post")
+@app.route("/add_post", methods=["POST"])
 def add_post():
-    return "TODO"
+    title = request.form["title"]
+    tags = request.form["tags"]
+    text = request.form["text"]
+
+    user = User(session["username"])
+
+    if not title or not tags or not text:
+        flash("You must give your post a title, tags, and a text body.")
+    else:
+        user.add_post(title, tags, text)
+
+    return redirect(url_for("index"))
 
 
 @app.route("/like_post/<post_id>")
