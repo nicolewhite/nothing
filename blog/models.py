@@ -55,6 +55,11 @@ class User:
             rel = Relationship(t, "TAGGED", post)
             graph.create(rel)
 
+    def like_post(self, post_id):
+        user = self.find()
+        post = graph.find_one("Post", "id", post_id)
+        graph.create_unique(Relationship(user, "LIKES", post))
+
 
 def todays_recent_posts(n):
     query = """

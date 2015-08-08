@@ -64,7 +64,16 @@ def add_post():
 
 @app.route("/like_post/<post_id>")
 def like_post(post_id):
-    return "TODO"
+    username = session.get("username")
+
+    if not username:
+        flash("You must be logged in to like a post.")
+        return redirect(url_for("login"))
+
+    user = User(username)
+    user.like_post(post_id)
+    flash("Liked post.")
+    return redirect(request.referrer)
 
 
 @app.route("/profile/<username>")
