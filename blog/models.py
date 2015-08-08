@@ -23,3 +23,11 @@ class User:
             return True
 
         return False
+
+    def verify_password(self, password):
+        user = self.find()
+
+        if not user:
+            return False
+
+        return bcrypt.verify(password, user["password"])
