@@ -54,3 +54,15 @@ class User:
             t = graph.merge_one("Tag", "name", tag)
             rel = Relationship(t, "TAGGED", post)
             graph.create(rel)
+
+
+def todays_recent_posts(n):
+    query = """
+    MATCH (user:User)-[:PUBLISHED]->(post:Post)<-[:TAGGED]-(tag:Tag)
+    WHERE post.date = {today}
+    RETURN user.username AS username, post, COLLECT(tag.name) AS tags
+    ORDER BY post.timestamp DESC LIMIT {n}
+    """
+
+    today = datetime.now().strftime("%F")
+    return graph.cypher.execute(query, today=today, n=n)
