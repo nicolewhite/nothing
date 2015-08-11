@@ -78,7 +78,10 @@ def like_post(post_id):
 
 @app.route("/profile/<username>")
 def profile(username):
-    return "TODO"
+    user = User(username)
+    posts = user.recent_posts(5)
+
+    return render_template("profile.html", username=username, posts=posts)
 
 
 @app.route("/logout")
