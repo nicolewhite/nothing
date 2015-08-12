@@ -1,11 +1,15 @@
 from flask import Flask, request, session, redirect, url_for, render_template, flash
+from flask.ext.cache import Cache
 from models import User, todays_recent_posts
 
 
 app = Flask(__name__)
 
+cache = Cache(app, config={"CACHE_TYPE": "simple"})
+
 
 @app.route("/")
+@cache.cached(timeout=30)
 def index():
     posts = todays_recent_posts(5)
     return render_template("index.html", posts=posts)
